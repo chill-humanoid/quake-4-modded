@@ -170,7 +170,7 @@ stateResult_t rvWeaponMachinegun::State_Idle( const stateParms_t& parms ) {
 	switch ( parms.stage ) {
 		case STAGE_INIT:
 			if ( !AmmoAvailable ( ) ) {
-				SetStatus ( WP_OUTOFAMMO );
+				SetStatus ( WP_READY );
 			} else {
 				SetStatus ( WP_READY );
 			}
