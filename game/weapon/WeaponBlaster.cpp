@@ -22,6 +22,7 @@ public:
 protected:
 
 	bool				UpdateAttack		( void );
+	float				spreadZoom;
 	bool				UpdateFlashlight	( void );
 	void				Flashlight			( bool on );
 
@@ -146,6 +147,7 @@ rvWeaponBlaster::Spawn
 ================
 */
 void rvWeaponBlaster::Spawn ( void ) {
+	spreadZoom = spawnArgs.GetFloat("spreadZoom");
 	viewModel->SetShaderParm ( BLASTER_SPARM_CHARGEGLOW, 0 );
 	SetState ( "Raise", 0 );
 	
@@ -165,6 +167,7 @@ rvWeaponBlaster::Save
 ================
 */
 void rvWeaponBlaster::Save ( idSaveGame *savefile ) const {
+	savefile->WriteFloat(spreadZoom);
 	savefile->WriteInt ( chargeTime );
 	savefile->WriteInt ( chargeDelay );
 	savefile->WriteVec2 ( chargeGlow );
@@ -178,6 +181,7 @@ rvWeaponBlaster::Restore
 ================
 */
 void rvWeaponBlaster::Restore ( idRestoreGame *savefile ) {
+	savefile->ReadFloat(spreadZoom);
 	savefile->ReadInt ( chargeTime );
 	savefile->ReadInt ( chargeDelay );
 	savefile->ReadVec2 ( chargeGlow );
@@ -423,7 +427,14 @@ stateResult_t rvWeaponBlaster::State_Fire ( const stateParms_t& parms ) {
 				SetState ( "Idle", 4 );
 				return SRESULT_DONE;
 			}
-
+			if (wsfl.zoom) {
+				nextAttackTime = gameLocal.time + (altFireRate * owner->PowerUpModifier(PMOD_FIRERATE));
+				Attack(true, 1, spreadZoom, 0, 1.0f);
+			}
+			else {
+				nextAttackTime = gameLocal.time + (fireRate * owner->PowerUpModifier(PMOD_FIRERATE));
+				Attack(false, 1, spread, 0, 1.0f);
+			}
 
 	
 			if ( gameLocal.time - fireHeldTime > chargeTime ) {	

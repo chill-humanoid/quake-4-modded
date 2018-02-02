@@ -50,7 +50,7 @@ rvWeaponMachinegun::rvWeaponMachinegun ( void ) {
 /*
 ================
 rvWeaponMachinegun::Spawn
-================
+================spreadZoom = spawnArgs.GetFloat ( "spreadZoom" );
 */
 void rvWeaponMachinegun::Spawn ( void ) {
 	spreadZoom = spawnArgs.GetFloat ( "spreadZoom" );
