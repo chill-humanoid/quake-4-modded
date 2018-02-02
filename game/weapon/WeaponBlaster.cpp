@@ -14,6 +14,7 @@ public:
 	rvWeaponBlaster ( void );
 
 	virtual void		Spawn				( void );
+	virtual void		Think               ( void );
 	void				Save				( idSaveGame *savefile ) const;
 	void				Restore				( idRestoreGame *savefile );
 	void				PreSave		( void );
@@ -23,6 +24,7 @@ protected:
 
 	bool				UpdateAttack		( void );
 	float				spreadZoom;
+	bool				fireHeld;
 	bool				UpdateFlashlight	( void );
 	void				Flashlight			( bool on );
 
@@ -148,6 +150,8 @@ rvWeaponBlaster::Spawn
 */
 void rvWeaponBlaster::Spawn ( void ) {
 	spreadZoom = spawnArgs.GetFloat("spreadZoom");
+	fireHeld = false;
+
 	viewModel->SetShaderParm ( BLASTER_SPARM_CHARGEGLOW, 0 );
 	SetState ( "Raise", 0 );
 	
@@ -168,6 +172,7 @@ rvWeaponBlaster::Save
 */
 void rvWeaponBlaster::Save ( idSaveGame *savefile ) const {
 	savefile->WriteFloat(spreadZoom);
+	savefile->WriteBool(fireHeld);
 	savefile->WriteInt ( chargeTime );
 	savefile->WriteInt ( chargeDelay );
 	savefile->WriteVec2 ( chargeGlow );
@@ -182,6 +187,7 @@ rvWeaponBlaster::Restore
 */
 void rvWeaponBlaster::Restore ( idRestoreGame *savefile ) {
 	savefile->ReadFloat(spreadZoom);
+	savefile->ReadBool(fireHeld);
 	savefile->ReadInt ( chargeTime );
 	savefile->ReadInt ( chargeDelay );
 	savefile->ReadVec2 ( chargeGlow );
@@ -213,6 +219,18 @@ rvWeaponBlaster::PostSave
 void rvWeaponBlaster::PostSave ( void ) {
 }
 
+/*
+================
+rvWeaponBlaster::Think
+================
+*/
+void rvWeaponBlaster::Think()
+{
+	rvWeapon::Think();
+	if (zoomGui && owner == gameLocal.GetLocalPlayer()) {
+		zoomGui->SetStateFloat("playerYaw", playerViewAxis.ToAngles().yaw);
+	}
+}
 /*
 ===============================================================================
 
@@ -405,61 +423,35 @@ stateResult_t rvWeaponBlaster::State_Fire ( const stateParms_t& parms ) {
 	enum {
 		FIRE_INIT,
 		FIRE_WAIT,
-	};	
-	switch ( parms.stage ) {
-		case FIRE_INIT:	
+	};
+	switch (parms.stage) {
+	case FIRE_INIT:
+		if (wsfl.zoom){
+			nextAttackTime = gameLocal.time + (altFireRate * owner->PowerUpModifier(PMOD_FIRERATE));
+			Attack(true, 1, spreadZoom, 0, 1.0f);
+			fireHeld = true;
+		}
+		else{
+			nextAttackTime = gameLocal.time + (fireRate * owner->PowerUpModifier(PMOD_FIRERATE));
+			Attack(false, 1, spread, 0, 1.0f);
+		}
+		PlayAnim(ANIMCHANNEL_ALL, "fire", 0);
+		return SRESULT_STAGE(FIRE_WAIT);
 
-			StopSound ( SND_CHANNEL_ITEM, false );
-			viewModel->SetShaderParm ( BLASTER_SPARM_CHARGEGLOW, 0 );
-			//don't fire if we're targeting a gui.
-			idPlayer* player;
-			player = gameLocal.GetLocalPlayer();
-
-			//make sure the player isn't looking at a gui first
-			if( player && player->GuiActive() )	{
-				fireHeldTime = 0;
-				SetState ( "Lower", 0 );
-				return SRESULT_DONE;
-			}
-
-			if( player && !player->CanFire() )	{
-				fireHeldTime = 0;
-				SetState ( "Idle", 4 );
-				return SRESULT_DONE;
-			}
-			if (wsfl.zoom) {
-				nextAttackTime = gameLocal.time + (altFireRate * owner->PowerUpModifier(PMOD_FIRERATE));
-				Attack(true, 1, spreadZoom, 0, 1.0f);
-			}
-			else {
-				nextAttackTime = gameLocal.time + (fireRate * owner->PowerUpModifier(PMOD_FIRERATE));
-				Attack(false, 1, spread, 0, 1.0f);
-			}
-
-	
-			if ( gameLocal.time - fireHeldTime > chargeTime ) {	
-				Attack ( true, 1, spread, 0, 1.0f );
-				PlayEffect ( "fx_chargedflash", barrelJointView, false );
-				PlayAnim( ANIMCHANNEL_ALL, "chargedfire", parms.blendFrames );
-			} else {
-				Attack ( false, 1, spread, 0, 1.0f );
-				PlayEffect ( "fx_normalflash", barrelJointView, false );
-				PlayAnim( ANIMCHANNEL_ALL, "fire", parms.blendFrames );
-			}
-			fireHeldTime = 0;
-			
-			return SRESULT_STAGE(FIRE_WAIT);
-		
-		case FIRE_WAIT:
-			if ( AnimDone ( ANIMCHANNEL_ALL, 4 ) ) {
-				SetState ( "Idle", 4 );
-				return SRESULT_DONE;
-			}
-			if ( UpdateFlashlight ( ) || UpdateAttack ( ) ) {
-				return SRESULT_DONE;
-			}
-			return SRESULT_WAIT;
-	}			
+	case FIRE_WAIT:
+		if (!fireHeld && wsfl.attack && gameLocal.time >= nextAttackTime && AmmoInClip() && !wsfl.lowerWeapon){
+			SetState("Fire", 0);
+			return SRESULT_DONE;
+		}
+		if (AnimDone(ANIMCHANNEL_ALL, 0)){
+			SetState("Idle", 0);
+			return SRESULT_DONE;
+		}
+		if (UpdateFlashlight()){
+			return SRESULT_DONE;
+		}
+		return SRESULT_WAIT;
+	}
 	return SRESULT_ERROR;
 }
 
