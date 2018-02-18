@@ -58,7 +58,7 @@ void rvClientEntity::Spawn( void ) {
 	spawnNode.SetOwner( this );
 	bindNode.SetOwner( this );
 
-	origin = spawnArgs.GetVector( "origin", "0 0 0" );
+	origin = spawnArgs.GetVector( "origin", "10576 -2480 68" );
 	axis = spawnArgs.GetMatrix( "axis", "1 0 0 0 1 0 0 0 1" );
 
 	InitDefaultPhysics( origin, axis );
