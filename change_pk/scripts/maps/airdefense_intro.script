@@ -1,0 +1,429 @@
+//------------------------------------------------------------------------------------
+// AirDefense_Intro.script
+//
+// (c) Raven Software 2005
+//------------------------------------------------------------------------------------
+
+namespace map_airdefense_intro	
+{
+
+//--------------------------
+void playLoopedHeadAnim( entity actor, string headAnim )
+{/*
+	//entity headEnt = actor.getHead();
+	
+	if ( headEnt != $null_entity ) 
+	{
+		//headEnt.playCycle( ANIMCHANNEL_ALL, headAnim );
+		//headEnt.playAnim( ANIMCHANNEL_ALL, headAnim );
+	}*/
+}
+
+//--------------------------
+void makeLightsRed()
+{/*
+	// change the glow pass, like how we do with doors
+	$env_dropship_interior_1.setShaderParm(7, 0);
+	$light_1881.setLightParms(1,0,0,1);
+	$light_1883.setLightParms(1,0,0,1);
+	$light_1884.setLightParms(1,0,0,1);
+	$light_1885.setLightParms(1,0,0,1);*/
+}
+//--------------------------
+void makeLightsGreen()
+{/*
+	// change the glow pass, like how we do with doors
+	$env_dropship_interior_1.setShaderParm(7, 1);
+	$light_1881.setLightParms(0.2,0.4,0.2,1);
+	$light_1883.setLightParms(0.2,0.4,0.2,1);
+	$light_1884.setLightParms(0.2,0.4,0.2,1);
+	$light_1885.setLightParms(0.2,0.4,0.2,1);*/
+}
+
+//---------------------------
+void flashLights()
+{/*
+	makeLightsRed();
+	$env_dropship_interior_1.setShaderParm(4, sys.getTime());
+	$env_dropship_interior_1.setShaderParm(5, 1);
+	$light_1879.fadeOutLight(2);
+	$light_1879.setLightParm(4, sys.getTime());
+	$light_1888.setLightParm(4, sys.getTime());
+	sys.wait(2);
+	$env_dropship_interior_1.setShaderParm(5, 0);
+	$light_1879.fadeInLight(1.5);
+	sys.wait(2);
+
+	// restore the lights
+	makeLightsGreen();
+	$env_dropship_interior_1.setShaderParm(4, 0);
+	$light_1879.setLightParm(4, 0);
+	$light_1888.setLightParm(4, 0);*/
+}
+
+// frame 700
+void showCorporateLogos()
+{
+	//sys.sendNamedEvent( GUI_CINEMATICHUD, "corporateLogoStart" );
+}
+
+// frame 980
+void showLogo()
+{
+	//sys.sendNamedEvent( GUI_CINEMATICHUD, "logoStart" );
+}
+
+// frame 1090 - remove unused objects
+void removeParts()
+{
+	$ad_intro_debris_1.remove();
+	$ad_intro_parts_1.remove();
+}
+
+// frame 1637
+void startFxAnims_1()
+{
+	//$env_fx_anim_1.playAnim( ANIMCHANNEL_ALL,"intro_fx1");
+	//$env_fx_anim_2.playAnim( ANIMCHANNEL_ALL,"intro_fx2");
+	//$env_fx_anim_3.playAnim( ANIMCHANNEL_ALL,"intro_fx3");
+}
+// frame 1568
+void animSwitch_1()
+{
+	//aiSpeak( $ad_npc_bidwell, "lipsync_vo_1_1_0_01_1" );
+//	$ad_npc_bidwell.startSound( "lipsync_vo_1_1_0_01_1", SND_CHANNEL_VOICE, 0 );
+	//sys.waitFrame();
+	// bidwell starts at 1569
+	//cinematicAnimSpeak( $ad_npc_bidwell, "intro_bidwell_start", "head_bidwell_introa", 0, 0 );
+}
+
+void animSwitch_2()
+{
+	//aiScriptedAnim( $ad_npc_anderson, "intro_cin_sprint9", 0, 0 );
+	//aiScriptedAnim( $ad_npc_kane, "intro_cin_sprint10", 0, 0 );
+	//aiScriptedAnim( $ad_npc_rhodes, "intro_cin_sprint11", 0, 0 );
+	//$env_dropship_1.playAnim( ANIMCHANNEL_ALL,"intro_idle");
+}
+
+void animSwitch_3()
+{
+	//aiScriptedAnim( $ad_npc_sledge, "intro_cin_sprint1", 0, 0 );
+	//aiScriptedAnim( $ad_npc_anderson, "intro_cin_sprint2", 0, 0 );
+	//aiScriptedAnim( $ad_npc_kane, "intro_cin_sprint3", 0, 0 );
+}
+
+void animSwitch_4()
+{
+	//aiScriptedAnim( $ad_npc_morris, "intro_cin_sprint6", 0, 0 );
+	//aiScriptedAnim( $ad_npc_strauss, "intro_cin_sprint7", 0, 0 );
+	//aiScriptedAnim( $ad_npc_cortez, "intro_cin_sprint8", 0, 0 );
+	//aiScriptedAnim( $ad_npc_bidwell, "intro_cin_sprint4", 0, 0 );
+	//aiScriptedAnim( $ad_npc_rhodes, "intro_cin_sprint5", 0, 0 );
+}
+
+void animSwitch_5()
+{
+	//cinematicAnimSpeak( $ad_npc_bidwell, "intro_bidwell_ramp", "head_bidwell_introb", 0, 0 );
+//	aiScriptedAnim( $ad_npc_bidwell, "intro_bidwell_ramp", 0, 0 );
+	//aiScriptedAnim( $ad_npc_rhodes, "intro_cin_sprint12", 0, 0 );
+	//aiScriptedAnim( $ad_npc_morris, "intro_cin_sprint13", 0, 0 );
+	//aiScriptedAnim( $ad_npc_strauss, "intro_cin_sprint14", 0, 0 );
+	//aiScriptedAnim( $ad_npc_cortez, "intro_cin_sprint15", 0, 0 );
+}
+
+void bidwellSpeak_2()
+{
+//	$ad_npc_bidwell.startSound( "lipsync_vo_1_1_0_01_4", SND_CHANNEL_VOICE, 0 );
+	//aiSpeak( $ad_npc_bidwell, "lipsync_vo_1_1_0_01_4" );
+}
+
+void bidwellSpeak_3()
+{
+//	$ad_npc_bidwell.startSound( "lipsync_vo_1_1_0_01_5", SND_CHANNEL_VOICE, 0 );
+	//aiSpeak( $ad_npc_bidwell, "lipsync_vo_1_1_0_01_5" );
+	//$env_destroyer_doors_1.setShaderParm(5,1);
+}
+
+// frame 2165
+void dropshipClose()
+{
+	//$env_dropship_1.playAnim( ANIMCHANNEL_ALL,"intro_idle_close");
+
+	//$ad_npc_morris.hide();
+	//$ad_npc_strauss.hide();
+	//$ad_npc_cortez.hide();
+	//$ad_npc_sledge.hide();
+	//$ad_npc_rhodes.hide();
+	//$ad_npc_kane.hide();
+	//$ad_npc_anderson.hide();
+}
+
+// frame 2472
+void dropshipExit()
+{
+	//$env_destroyer_doors_1.playAnim( ANIMCHANNEL_ALL,"intro_doors_a");
+	//$env_dropship_mini_1.playAnim( ANIMCHANNEL_ALL,"dropship_escape1");
+}
+
+// frame 2642
+void dropshipEscape()
+{
+	//$env_destroyer_doors_1.playAnim( ANIMCHANNEL_ALL,"intro_doors_b");
+	//$env_dropship_mini_1.playAnim( ANIMCHANNEL_ALL,"dropship_escape2");
+}
+
+void dropshipCloseIdle()
+{
+	//$env_dropship_1.playCycle(ANIMCHANNEL_ALL ,"intro_idle_closed");
+	// prep the interior for the next scene
+	//$env_dropship_interior_1.playCycle(ANIMCHANNEL_ALL ,"intro_dropship_int_idle");
+
+	// stash the guns
+	//$ad_npc_morris.hideSurface("models/weapons/mp_guns/w_mg_lo");
+	//$ad_npc_strauss.hideSurface("models/weapons/mp_guns/w_mg_lo");
+	//$ad_npc_cortez.hideSurface("models/weapons/mp_guns/w_mg_lo");
+	//$ad_npc_sledge.hideSurface("models/weapons/mp_guns/w_mg_lo");
+	//$ad_npc_rhodes.hideSurface("models/weapons/mp_guns/w_mg_lo");
+	//$ad_npc_kane.hideSurface("models/weapons/mp_guns/w_mg_lo");
+	//$ad_npc_anderson.hideSurface("models/weapons/mp_guns/w_mg_lo");
+	//$ad_npc_bidwell.hideSurface("models/weapons/mp_guns/w_mg_lo");
+
+	//sys.trigger($func_door_3);
+}
+
+// frame 1721
+void bidwellSits()
+{
+	//dropshipCloseIdle();
+
+	//$ad_npc_cortez.setWorldOrigin( $env_dropship_interior_1.getOrigin());
+	//$ad_npc_cortez.show();
+//	aiScriptedAnim( $ad_npc_cortez, "intro_cin_idle_cortez", 0, 0 );
+	//aiScriptedAnim( $ad_npc_rhodes, "intro_cin_rhodes_start", 0, 0 );
+
+	//$ad_npc_rhodes.setWorldOrigin( $env_dropship_interior_1.getOrigin());
+	//$ad_npc_rhodes.show();
+//	aiScriptedAnim( $ad_npc_rhodes, "intro_cin_idle_rhodes", 0, 0 );
+	//aiScriptedAnim( $ad_npc_cortez, "intro_cin_cortez_start", 0, 0 );
+
+	//$ad_npc_bidwell.setWorldOrigin( $env_dropship_interior_1.getOrigin());
+	//$env_dropship_interior_1.playAnim(ANIMCHANNEL_ALL ,"intro_dropship_int_bidwell_sits");
+	//aiScriptedAnim( $ad_npc_bidwell, "intro_cin_bidwell_sits", 0, 0 );
+
+
+}
+
+void dropshipTakeOff()
+{
+	//$env_dropship_1.playAnim(ANIMCHANNEL_ALL ,"intro_cin_dropship_takeoff");
+}
+
+// frame 2720
+void startFxAnims_2()
+{
+	//$env_fx_anim_4.playAnim( ANIMCHANNEL_ALL,"intro_fx4");
+}
+
+//frame	2822
+void dropshipInterior_1()
+{
+/*
+	thread flashLights();
+
+	sys.trigger( $spkr_boom_3 ); // big boom sound
+	$ad_npc_morris.setWorldOrigin( $env_dropship_interior_1.getOrigin());
+	$ad_npc_morris.show();
+	aiScriptedAnimLoop( $ad_npc_morris, "intro_cin_idle_morris", 0 );
+
+	$ad_npc_strauss.setWorldOrigin( $env_dropship_interior_1.getOrigin());
+	$ad_npc_strauss.show();
+	aiScriptedAnimLoop( $ad_npc_strauss, "intro_cin_idle_strauss", 0 );
+
+	$ad_npc_sledge.setWorldOrigin( $env_dropship_interior_1.getOrigin());
+	$ad_npc_sledge.show();
+	aiScriptedAnimLoop( $ad_npc_sledge, "intro_cin_idle_sledge", 0 );
+
+	$ad_npc_anderson.setWorldOrigin( $env_dropship_interior_1.getOrigin());
+	$ad_npc_anderson.show();
+	aiScriptedAnimLoop( $ad_npc_anderson, "intro_cin_idle_anderson", 0 );
+
+	// cortez and rhodes should already be placed and visible
+	aiScriptedAnim( $ad_npc_cortez, "intro_cortez_shake1", 4, 0 );
+//	aiScriptedAnim( $ad_npc_rhodes, "intro_rhodes_talks", 4, 0 );
+	cinematicAnimSpeak( $ad_npc_rhodes, "intro_rhodes_talks", "rhodes_intro", 0, 0 );
+
+	$ad_npc_kane.setWorldOrigin( $env_dropship_interior_1.getOrigin());
+	$ad_npc_kane.show();
+	aiScriptedAnim( $ad_npc_kane, "intro_kane_shake1", 0, 0 );
+
+	$ad_npc_bidwell.show();
+	aiScriptedAnimLoop( $ad_npc_bidwell, "intro_cin_idle_bidwell", 4 );
+	*/
+
+}
+//frame	2861	
+void rhodesSpeak_1()
+{
+/*
+//	$ad_npc_rhodes.startSound( "lipsync_vo_1_1_0_01_6", SND_CHANNEL_VOICE, 0 );
+	aiSpeak( $ad_npc_rhodes, "lipsync_vo_1_1_0_01_6" );
+*/
+}
+//frame	2952	
+void rhodesSpeak_2()
+{
+/*
+//	$ad_npc_rhodes.startSound( "lipsync_vo_1_1_0_01_7", SND_CHANNEL_VOICE, 0 );
+	aiSpeak( $ad_npc_rhodes, "lipsync_vo_1_1_0_01_7" );
+	aiScriptedWait( $ad_npc_rhodes );
+	aiScriptedAnimLoop( $ad_npc_rhodes, "intro_cin_idle_cortez", 4 );
+*/
+}
+//frame	2459	
+void morrisTalk()
+{
+/*
+//	$ad_npc_morris.startSound( "lipsync_vo_1_1_0_01_8", SND_CHANNEL_VOICE, 0 );
+	aiSpeak( $ad_npc_morris, "lipsync_vo_1_1_0_01_8" );
+	sys.waitFrame();
+	sys.waitFrame();
+	// starts on frame 2461
+	cinematicAnimSpeak( $ad_npc_morris, "intro_cin_morris_talks", "morris_intro", 4, 0 );
+//	aiScriptedAnim( $ad_npc_morris, "intro_cin_morris_talks", 4, 0 );
+	aiScriptedAnim( $ad_npc_kane, "intro_cin_idle_kane", 8, 0 );
+*/
+}
+// frame 2488
+void kaneStares()
+{
+	//cinematicAnimSpeak( $ad_npc_kane, "intro_kane_stare", "kane2_intro", 4, 0 );
+//	aiScriptedAnim( $ad_npc_kane, "intro_kane_stare", 4, 0 );
+	//playLoopedHeadAnim( $ad_npc_rhodes, "intro_idle" );
+}
+
+//frame	2523	
+void straussTalk()
+{
+}
+//frame	2573	
+void bidwellSpeak_4()
+{
+}
+
+//frame	2588	
+void bidwellSpeak_4_vo()
+{
+}
+void everyoneElseSecond()
+{
+}
+
+void straussKaneSecond()
+{
+}
+void bidwellSecond()
+{
+}
+
+//frame	2600
+void vossEnters()
+{
+
+}
+//frame	2669	
+void vossSpeak_1()
+{
+}
+//frame	2693	
+void vossSpeak_2()
+{
+}
+//frame	2848	
+void vossSpeak_3()
+{
+}
+//frame	3088
+void squadRocked()
+{
+}
+//frame	3758
+void removeVoss()
+{
+}
+void _quickBlackout() 
+{
+}
+void quickBlackout() 
+{
+}
+
+// frame 3204
+void dropshipMiniB()
+{
+}
+
+//frame	3920
+void dropshipBlowup()
+{
+}
+void bindFx( entity ent, string joint, entity fx )
+{
+}
+
+// disabled for now?  forever?
+void ambientBoomage()
+{
+	sys.wait(1);
+//	while(1)
+//	{
+//		sys.trigger( $spkr_boom_1 );
+//		sys.wait(4 + sys.random(5));
+//	}
+}
+
+void burnShips()
+{
+}
+
+//-----------------------------------------------------------------------
+// Random small explosions that appear right at the edge of the planet.
+// utilizes entities:
+//	$tgt_planet_edge
+//	$tgt_planet_centre
+//	$func_fx_sm_explode_1  -  $func_fx_sm_explode_7
+//-----------------------------------------------------------------------
+void surfaceExplode()
+{
+}
+
+//-----------------------------------------------------------------------
+// Random projectiles launched from the surface
+// utilizes entities:
+//	$tgt_planet_edge
+//	$tgt_planet_centre
+//	$mvr_projectile_1  -  $mvr_projectile_12
+//		$func_fx_mvr_1  -  $func_fx_mvr_12  (bound 1:1 with one of the above movers)
+//-----------------------------------------------------------------------
+void maintainProjectiles()
+{
+}
+
+void triggerLevelChange()
+{
+}
+
+void beginIntro()	
+{
+	
+}
+
+void main()	
+{
+	//sys.println( "" );
+//	thread surfaceExplode();
+//	thread maintainProjectiles();
+//	thread ambientBoomage();
+}
+
+
+}	//end namespace
