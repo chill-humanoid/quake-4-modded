@@ -2548,13 +2548,13 @@ idElevator::OpenFloorDoor
 ================
 */
 void idElevator::OpenFloorDoor( int floor ) {
-	floorInfo_s *fi = GetFloorInfo( floor );
-	if ( fi ) {
-		idDoor *door = GetDoor( fi->door );
-		if ( door ) {
-			door->Open();
-		}
-	}
+	//floorInfo_s *fi = GetFloorInfo( floor );
+	//if ( fi ) {
+		//idDoor *door = GetDoor( fi->door );
+		//if ( door ) {
+			//door->Open();
+		//}
+	//}
 }
 
 /*
@@ -4433,7 +4433,7 @@ idDoor::Open
 ================
 */
 void idDoor::Open( void ) {
-	GotoPosition2();
+	//GotoPosition2(); lets try this to get doors to not open
 }
 
 /*
@@ -4442,7 +4442,7 @@ idDoor::Close
 ================
 */
 void idDoor::Close( void ) {
-	GotoPosition1();
+	//GotoPosition1();
 }
 
 /*
@@ -4564,7 +4564,7 @@ idDoor::SetDoorFrameController
 ==============================
 */
 void idDoor::SetDoorFrameController( idEntity* controller ) {
-	doorFrameController = controller;
+	//doorFrameController = controller;
 }
 
 /*
@@ -4576,7 +4576,7 @@ If we have a frame controller we activate its targets
 */
 void idDoor::ActivateTargets( idEntity *activator ) const {
 	if ( doorFrameController.IsValid() && static_cast< const idMover_Binary *>( GetMoveMaster() ) == this && moverState == MOVER_POS1 ) {
-		doorFrameController->ActivateTargets( activator );
+		//doorFrameController->ActivateTargets( activator );
 	}
 
 	idMover_Binary::ActivateTargets( activator );
@@ -4591,20 +4591,7 @@ if "start_open", reverse position 1 and 2
 ======================
 */
 void idDoor::Event_StartOpen( void ) {
-	float time;
-	float speed;
-
-	// if "start_open", reverse position 1 and 2
-	pos1 = pos2;
-	pos2 = GetPhysics()->GetOrigin();
-
-	spawnArgs.GetFloat( "speed", "400", speed );
-
-	if ( spawnArgs.GetFloat( "time", "1", time ) ) {
-		InitTime( pos1, pos2, time, 0, 0 );
-	} else {
-		InitSpeed( pos1, pos2, speed, 0, 0 );
-	}
+	//removed by chillhumanodi im really trying to get doors to not work. 
 }
 
 /*
@@ -4616,61 +4603,7 @@ a trigger that encloses all of them.
 ======================
 */
 void idDoor::Event_SpawnDoorTrigger( void ) {
-	idBounds		bounds;
-	idMover_Binary	*other;
-	bool			toggle;
-
-	if ( trigger ) {
-		// already have a trigger, so don't spawn a new one.
-		return;
-	}
-
-	// check if any of the doors are marked as toggled
-	toggle = false;
-	for( other = moveMaster; other != NULL; other = other->GetActivateChain() ) {
-		if ( other->IsType( idDoor::Type ) && other->spawnArgs.GetBool( "toggle" ) ) {
-			toggle = true;
-			break;
-		}
-	}
-
-	if ( toggle ) {
-		// mark them all as toggled
-		for( other = moveMaster; other != NULL; other = other->GetActivateChain() ) {
-			if ( other->IsType( idDoor::Type ) ) {
-				other->spawnArgs.Set( "toggle", "1" );
-			}
-		}
-		// don't spawn trigger
-		return;
-	}
-
-	const char *sndtemp = spawnArgs.GetString( "snd_locked" );
-	if ( spawnArgs.GetInt( "locked" ) && sndtemp && *sndtemp ) {
-		PostEventMS( &EV_Door_SpawnSoundTrigger, 0 );
-	}
-
-	CalcTriggerBounds( triggersize, bounds );
-
-	// create a trigger clip model
-// RAVEN BEGIN
-// mwhitlock: Dynamic memory consolidation
-	RV_PUSH_HEAP_MEM(this);
-// RAVEN END
-	trigger = new idClipModel( idTraceModel( bounds ) );
-// RAVEN BEGIN
-// mwhitlock: Dynamic memory consolidation
-	RV_POP_HEAP();
-// RAVEN END
-// RAVEN BEGIN
-// ddynerman: multiple clip worlds
-	trigger->Link( this, 255, GetPhysics()->GetOrigin(), mat3_identity );
-// RAVEN END
-	trigger->SetContents( CONTENTS_TRIGGER );
-
-	GetLocalTriggerPosition( trigger );
-
-	MatchActivateTeam( moverState, gameLocal.time );
+	//removed by chill
 }
 
 /*
@@ -4681,31 +4614,7 @@ Spawn a sound trigger to activate locked sound if it exists.
 ======================
 */
 void idDoor::Event_SpawnSoundTrigger( void ) {
-	idBounds bounds;
-
-	if ( sndTrigger ) {
-		return;
-	}
-
-	CalcTriggerBounds( triggersize * 0.5f, bounds );
-
-	// create a trigger clip model
-// RAVEN BEGIN
-// mwhitlock: Dynamic memory consolidation
-	RV_PUSH_HEAP_MEM(this);
-// RAVEN END
-	sndTrigger = new idClipModel( idTraceModel( bounds ) );
-// RAVEN BEGIN
-// mwhitlock: Dynamic memory consolidation
-	RV_POP_HEAP();
-// RAVEN END
-// RAVEN BEGIN
-// ddynerman: multiple clip worlds
-	sndTrigger->Link( this, 254, GetPhysics()->GetOrigin(), mat3_identity );
-// RAVEN END
-	sndTrigger->SetContents( CONTENTS_TRIGGER );
-
-	GetLocalTriggerPosition( sndTrigger );
+	//removed by chill
 }
 
 /*
@@ -4906,43 +4815,7 @@ idDoor::Event_Activate
 ================
 */
 void idDoor::Event_Activate( idEntity *activator ) {
-	int old_lock;
-
-	if ( spawnArgs.GetInt( "locked" ) ) {
-		if ( !trigger ) {
-			PostEventMS( &EV_Door_SpawnDoorTrigger, 0 );
-		}
-		UpdateBuddies( 1 );
-
-		old_lock = spawnArgs.GetInt( "locked" );
-		Lock( 0 );
-		if ( old_lock == 2 ) {
-			return;
-		}
-	}
-
-  	if ( syncLock.Length() ) {
-		idEntity *sync = gameLocal.FindEntity( syncLock );
-		if ( sync && sync->IsType( idDoor::Type ) ) {
-			if ( static_cast<idDoor *>( sync )->IsOpen() ) {
-  				return;
-  			}
-  		}
-	}
-
-// RAVEN BEGIN
-// abahr:
-	if( doorFrameController.IsValid() && doorFrameController != activator ) {
-		doorFrameController->ProcessEvent( &EV_Activate, activator );
-	} else {
-		ActivateTargets( activator );
-
-		renderEntity.shaderParms[ SHADERPARM_MODE ] = 1;
-		UpdateVisuals();
-
-		Use_BinaryMover( activator );	
-	}
-//RAVEN END
+	//removed by chill
 }
 
 /*
@@ -4951,7 +4824,7 @@ idDoor::Event_Open
 ================
 */
 void idDoor::Event_Open( void ) {
-	Open();
+	//Open();
 }
 
 /*
@@ -4960,7 +4833,7 @@ idDoor::Event_Close
 ================
 */
 void idDoor::Event_Close( void ) {
-	Close();
+	//Close();
 }
 
 /*
@@ -4969,7 +4842,7 @@ idDoor::Event_Lock
 ================
 */
 void idDoor::Event_Lock( int f ) {
-	Lock( f );
+	//Lock( f );
 }
 
 /*
@@ -4978,10 +4851,6 @@ idDoor::Event_IsOpen
 ================
 */
 void idDoor::Event_IsOpen( void ) {
-	bool state;
-
-	state = IsOpen();
-	idThread::ReturnFloat( state );
 }
 
 /*
@@ -4990,7 +4859,6 @@ idDoor::Event_Locked
 ================
 */
 void idDoor::Event_Locked( void ) {
-	idThread::ReturnFloat( spawnArgs.GetInt("locked") );
 }
 
 /*
